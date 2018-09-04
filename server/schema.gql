@@ -1,0 +1,4 @@
+# Schemas require a top level type named `Query`
+type Query {
+  greeting: String
+}
