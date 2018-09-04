@@ -19,6 +19,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const app = express();
 app.use(
+  // GraphQL requests are in JSON format - apply CORS middleware to all requests
   cors(),
   bodyParser.json(),
   expressJwt({

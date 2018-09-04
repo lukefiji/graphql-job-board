@@ -1,4 +1,13 @@
 # Schemas require a top level type named `Query`
 type Query {
-  greeting: String
+  # An array of Jobs
+  jobs: [Job]
+}
+
+type Job {
+  # IDs is a built-in type, similar to a string
+  # ! - Required field
+  id: ID!
+  title: String
+  description: String
 }
