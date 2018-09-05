@@ -12,6 +12,15 @@ const Query = {
   company: (root, { id }) => db.companies.get(id)
 };
 
+const Mutation = {
+  // Input object comes from schema
+  createJob: (root, { input }) => {
+    // Return a job ID
+    const id = db.jobs.create(input);
+    return db.jobs.get(id);
+  }
+};
+
 // `Job` type resolver
 const Job = {
   // Company is a foriegn key in this case

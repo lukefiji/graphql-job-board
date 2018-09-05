@@ -7,6 +7,13 @@ type Query {
   company(id: ID!): Company
 }
 
+# A Mutation is a root type like Query
+type Mutation {
+  # Mutations have arguments and also require return types
+  createJob(input: CreateJobInput): Job
+}
+
+# Output Types
 type Job {
   # IDs is a built-in type, similar to a string
   # ! - Required field
@@ -22,4 +29,11 @@ type Company {
   name: String
   description: String
   jobs: [Job]
+}
+
+# Input Types - used to simplify arguments
+input CreateJobInput {
+  companyId: ID
+  title: String
+  description: String
 }
