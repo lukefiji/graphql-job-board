@@ -4,6 +4,7 @@ type Query {
   jobs: [Job]
   # Adding arguments to a query
   job(id: ID!): Job
+  company(id: ID!): Company
 }
 
 type Job {
@@ -20,4 +21,5 @@ type Company {
   id: ID!
   name: String
   description: String
+  jobs: [Job]
 }

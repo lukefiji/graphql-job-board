@@ -8,7 +8,8 @@ const Query = {
    * First argument - parent value (root object in this case)
    * Second argument - arguments in the GraphQL query
    */
-  job: (root, { id }) => db.jobs.get(id)
+  job: (root, { id }) => db.jobs.get(id),
+  company: (root, { id }) => db.companies.get(id)
 };
 
 // `Job` type resolver
@@ -19,4 +20,10 @@ const Job = {
   company: job => db.companies.get(job.companyId) // Match Job's foreign key /w a Company's ID
 };
 
-module.exports = { Query, Job };
+const Company = {
+  // Company is the parent object (root)
+  // One-to-many relationship between company and job
+  jobs: company => db.jobs.list().filter(job => job.companyId === company.id)
+};
+
+module.exports = { Query, Job, Company };
