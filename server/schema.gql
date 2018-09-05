@@ -9,5 +9,13 @@ type Job {
   # ! - Required field
   id: ID!
   title: String
+  # Associates `company` field with `Company` type
+  company: Company
+  description: String
+}
+
+type Company {
+  id: ID!
+  name: String
   description: String
 }

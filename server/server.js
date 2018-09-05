@@ -19,8 +19,9 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const app = express();
 app.use(
-  // GraphQL requests are in JSON format - apply CORS middleware to all requests
+  // Apply CORS middleware to all requests
   cors(),
+  // GraphQL requests are in JSON format
   bodyParser.json(),
   expressJwt({
     secret: jwtSecret,
@@ -28,7 +29,9 @@ app.use(
   })
 );
 
+// Make schema accessible via the `/graphql` endpoint
 app.use('/graphql', graphqlExpress({ schema }));
+// Make graphical interface accessible via the `/graphiql` endpoint
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 app.post('/login', (req, res) => {
