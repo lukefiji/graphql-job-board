@@ -2,7 +2,13 @@ const db = require('./db');
 
 // Resolves how each request is handled
 const Query = {
-  jobs: () => db.jobs.list()
+  jobs: () => db.jobs.list(),
+  /**
+   * Passing GraphQL arguments:
+   * First argument - parent value (root object in this case)
+   * Second argument - arguments in the GraphQL query
+   */
+  job: (root, { id }) => db.jobs.get(id)
 };
 
 // `Job` type resolver

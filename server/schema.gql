@@ -2,6 +2,8 @@
 type Query {
   # An array of Jobs
   jobs: [Job]
+  # Adding arguments to a query
+  job(id: ID!): Job
 }
 
 type Job {
