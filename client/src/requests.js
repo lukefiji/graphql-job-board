@@ -1,44 +1,40 @@
-import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache
+} from 'apollo-boost';
 import gql from 'graphql-tag';
 import { getAccessToken, isLoggedIn } from './auth';
 
 const endpointURL = 'http://localhost:9000/graphql';
 
-// Create and configure a new Apollo client
-const client = new ApolloClient({
-  link: new HttpLink({ uri: endpointURL }),
-  cache: new InMemoryCache()
+/**
+ * A custom Apollo Link instance used in Apollo Client
+ * used in the configuration for ApolloLink.from()
+ * That takes an array of Apollo Link instances and
+ * combines them together
+ */
+const authLink = new ApolloLink((operation, forward) => {
+  if (isLoggedIn()) {
+    // Setting a header in the operation context which
+    // will be used by HttpLink when making the HTTP request
+    operation.setContext({
+      headers: {
+        authorization: 'Bearer ' + getAccessToken()
+      }
+    });
+  }
+  // Forward lets us chain multiple steps together
+  // - Forward operation to the next step
+  return forward(operation);
 });
 
-/**
- * Send the GraphQL query as an HTTP request
- * Prefix variables with `$`
- * Parameters require types
- */
-async function graphqlRequest(query, variables = {}) {
-  const request = {
-    method: 'POST',
-    // Set request content-type to JSON
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ query, variables })
-  };
-
-  if (isLoggedIn()) {
-    request.headers['authorization'] = 'Bearer ' + getAccessToken();
-  }
-
-  const response = await fetch(endpointURL, request);
-  const responseBody = await response.json();
-
-  // You will only see these messages in dev mode
-  // Production builds will hide errors
-  if (responseBody.errors) {
-    const message = responseBody.errors.map(error => error.message).join('\n');
-    throw new Error(message);
-  }
-
-  return responseBody.data;
-}
+// Create and configure a new Apollo client
+const client = new ApolloClient({
+  link: ApolloLink.from([authLink, new HttpLink({ uri: endpointURL })]),
+  cache: new InMemoryCache()
+});
 
 export async function loadJobs() {
   // Tagged function via gql
@@ -57,7 +53,8 @@ export async function loadJobs() {
   // Create a query, passing in a structuerec object
   const {
     data: { jobs }
-  } = await client.query({ query });
+    // Force `no-cache` /w this fetch policy
+  } = await client.query({ query, fetchPolicy: 'no-cache' });
   return jobs;
 }
 
