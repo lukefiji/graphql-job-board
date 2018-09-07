@@ -19,6 +19,7 @@ const Mutation = {
     // Check user auth passed in from context via middleware
     if (!user) {
       throw new Error('Unauthorized');
+      return null;
     }
 
     // Return a job ID
