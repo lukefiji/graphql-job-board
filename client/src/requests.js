@@ -59,6 +59,7 @@ export async function loadJob(id) {
 }
 
 export async function createJob(input) {
+  // `job` is an alias for `createJob`
   const mutation = `
   mutation CreateJob($input: CreateJobInput) {
     job: createJob(input: $input) {
@@ -69,8 +70,7 @@ export async function createJob(input) {
         name
       }
     }
-  }
-  `;
+  }`;
   const { job } = await graphqlRequest(mutation, { input });
   return job;
 }

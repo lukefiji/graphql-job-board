@@ -17,6 +17,7 @@ const Mutation = {
   createJob: (root, { input }) => {
     // Return a job ID
     const id = db.jobs.create(input);
+    // Return the new job
     return db.jobs.get(id);
   }
 };
@@ -35,4 +36,4 @@ const Company = {
   jobs: company => db.jobs.list().filter(job => job.companyId === company.id)
 };
 
-module.exports = { Query, Job, Company };
+module.exports = { Query, Job, Company, Mutation };
