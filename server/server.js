@@ -23,6 +23,7 @@ app.use(
   cors(),
   // GraphQL requests are in JSON format
   bodyParser.json(),
+  // ExpressJWT - A middleware to check if a user is authenticated
   expressJwt({
     secret: jwtSecret,
     credentialsRequired: false
@@ -30,7 +31,14 @@ app.use(
 );
 
 // Make schema accessible via the `/graphql` endpoint
-app.use('/graphql', graphqlExpress({ schema }));
+app.use(
+  '/graphql',
+  graphqlExpress(req => ({
+    schema,
+    // You can pass anything you want into a context
+    context: { user: req.user } // req.user comes from ExpressJWT middleware
+  }))
+);
 // Make graphical interface accessible via the `/graphiql` endpoint
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 

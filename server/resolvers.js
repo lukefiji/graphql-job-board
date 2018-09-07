@@ -14,7 +14,13 @@ const Query = {
 
 const Mutation = {
   // Input object comes from schema
-  createJob: (root, { input }) => {
+  // Third parameter = context
+  createJob: (root, { input }, { user }) => {
+    // Check user auth passed in from context via middleware
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+
     // Return a job ID
     const id = db.jobs.create(input);
     // Return the new job
