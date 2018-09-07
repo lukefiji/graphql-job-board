@@ -23,7 +23,10 @@ const Mutation = {
     }
 
     // Return a job ID
-    const id = db.jobs.create(input);
+    const id = db.jobs.create({
+      companyId: user.companyId,
+      ...input
+    });
     // Return the new job
     return db.jobs.get(id);
   }

@@ -33,7 +33,6 @@ type Company {
 
 # Input Types - used to simplify arguments
 input CreateJobInput {
-  companyId: ID
   title: String
   description: String
 }

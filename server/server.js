@@ -36,7 +36,7 @@ app.use(
   graphqlExpress(req => ({
     schema,
     // You can pass anything you want into a context
-    context: { user: req.user } // req.user comes from ExpressJWT middleware
+    context: { user: req.user && db.users.get(req.user.sub) } // req.user comes from ExpressJWT middleware
   }))
 );
 // Make graphical interface accessible via the `/graphiql` endpoint
